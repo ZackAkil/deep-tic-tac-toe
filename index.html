@@ -2,8 +2,7 @@
 <header>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
-        integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous" />
 
     <style>
         #grid>button {
@@ -13,21 +12,21 @@
             margin: 10px;
             font-size: 1.1em;
         }
-
+        
         body {
             text-align: center;
         }
-
+        
         #grid {
             width: 600px;
             margin-right: auto;
             margin-left: auto;
         }
-
+        
         .ai {
             background-color: #33C3F0;
         }
-
+        
         .player {
             background-color: rgb(240, 196, 51);
         }
@@ -39,18 +38,17 @@
     <div id="app" class="container">
         <h2><a href="https://github.com/ZackAkil/deep-tic-tac-toe">Deep Tic-Tac-Toe</a></h2>
         <div class="row" style="text-align: center;">
-        <p style="    width: 500px;
+            <p style="    width: 500px;
         margin-left: auto;
         margin-right: auto;
     ">
-            Used deep reinforcement learning to train a deep neural network to play tic-tac-toe and deployed using tensorflow.js.
-        </p>
-    </div>
+                Used deep reinforcement learning to train a deep neural network to play tic-tac-toe and deployed using tensorflow.js.
+            </p>
+        </div>
         <p><a href="https://twitter.com/ZackAkil">@ZackAkil</a> - <a href="https://github.com/ZackAkil/deep-tic-tac-toe">GitHub repo</a></p>
         <p><span>Show raw output for model's move: </span><input type="checkbox" v-model="show_pred" checked></p>
         <div id="grid">
-            <button v-for="(cell, index) in grid" v-on:click="move(index)"
-                v-bind:class="{ ai: cell==1, player: cell==2}" :disabled="end_game||(cell != 0)">
+            <button v-for="(cell, index) in grid" v-on:click="move(index)" v-bind:class="{ ai: cell==1, player: cell==2}" :disabled="end_game||(cell != 0)">
                 <span v-if="cell == 1">X</span>
                 <span v-else-if="cell == 2">O</span>
                 <p v-if="show_pred">{{Math.round(pred[index]*100)/100 }}</p>
@@ -60,7 +58,7 @@
             <br>
             <h4 v-if="end_game">{{game_status}}</h4>
             <br>
-                <button v-on:click="reset_game()">Reset Game</button>
+            <button v-on:click="reset_game()">Reset Game</button>
 
         </div>
 
@@ -68,7 +66,7 @@
 
     <script>
         var model;
-        tf.loadLayersModel('model/model.json').then((models) => {
+        tf.loadLayersModel('model/model_v2.json').then((models) => {
             model = models
             console.log('loaded model')
             ai_move()
@@ -77,7 +75,7 @@
         function predict(x) {
 
             const input = tf.tensor(x, [1, 3, 3, 2])
-            // input.print(true)
+                // input.print(true)
             const pred = model.predict(input).dataSync()
             Vue.set(app, 'pred', pred)
             return tf.tensor1d(pred).argMax().dataSync()[0]
@@ -153,8 +151,7 @@
 
                 console.log('end game :', winner)
                 app.end_game = true
-            }
-            else if (is_full_grid()) {
+            } else if (is_full_grid()) {
                 console.log('end game : Tie')
                 app.game_status = "Tie game!"
                 app.end_game = true
@@ -218,20 +215,15 @@
                 return 1
 
                 console.log('player 1 win')
-            }
-
-            else if (is_winner(2)) {
+            } else if (is_winner(2)) {
                 return 2
 
                 console.log('player 2 win')
-            }
-
-            else {
+            } else {
                 return 0
             }
 
         }
-
     </script>
 
 </body>
