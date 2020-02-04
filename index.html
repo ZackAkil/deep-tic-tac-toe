@@ -11,6 +11,7 @@
             vertical-align: top;
             margin: 10px;
             font-size: 1.1em;
+            transition: background-color 0.1s ease;
         }
         
         body {
@@ -65,11 +66,17 @@
     </div>
 
     <script>
+        const AI_DELAY = 100; // yes the model is so fast we have to slow it down to make it look like it's thinking
         var model;
         tf.loadLayersModel('model/model.json').then((models) => {
             model = models
             console.log('loaded model')
-            ai_move()
+
+            if (Math.random() > 0.5) {
+                setTimeout(function() {
+                    ai_move()
+                }, AI_DELAY);
+            }
         });
 
         function predict(x) {
@@ -112,15 +119,26 @@
             console.log(button)
             app.grid.splice(button, 1, 2)
             get_game_state()
-            ai_move()
-            get_game_state()
+
+            if (app.end_game != true) {
+                setTimeout(function() {
+                    ai_move()
+                    get_game_state()
+                }, AI_DELAY);
+
+            }
         }
 
         function reset_game() {
             app.end_game = false
             Vue.set(app, 'pred', [0, 0, 0, 0, 0, 0, 0, 0, 0])
             Vue.set(app, 'grid', [0, 0, 0, 0, 0, 0, 0, 0, 0])
-            ai_move()
+
+
+
+            if (Math.random() > 0.5) {
+                ai_move()
+            }
         }
 
         function ai_move() {
