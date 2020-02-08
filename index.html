@@ -68,16 +68,11 @@
     <script>
         const AI_DELAY = 100; // yes the model is so fast we have to slow it down to make it look like it's thinking
         var model;
-        var ai_starts = true;
+        var ai_starts = false;
         tf.loadLayersModel('model/model.json').then((models) => {
             model = models
             console.log('loaded model')
-
-            if (Math.random() > 0.5) {
-                setTimeout(function() {
-                    ai_move()
-                }, AI_DELAY);
-            }
+            reset_game()
         });
 
         function predict(x) {
